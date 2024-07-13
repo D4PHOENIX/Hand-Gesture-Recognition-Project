@@ -6,7 +6,7 @@ import numpy as np
 import pickle
 
 # Load the data
-data_dict = pickle.load(open('D:\\University\\Programming\\Python\\AI Projects\\Sign Language Translator\\data.pickle', 'rb'))
+data_dict = pickle.load(open('.\\data.pickle', 'rb'))
 
 # Verify data consistency
 data = data_dict['data']

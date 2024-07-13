@@ -1,11 +1,11 @@
 import os
 import cv2
 
-img_dataset = 'D:\\University\\Programming\\Python\\AI Projects\\Sign Language Translator\\Data'
+img_dataset = '.\\Data'
 if not os.path.exists(img_dataset):
     os.makedirs(img_dataset)
 
-number_of_classes = 3
+number_of_classes = 1
 dataset_size = 100
 
 # Try different camera indices

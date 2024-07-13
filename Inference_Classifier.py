@@ -4,7 +4,7 @@ import mediapipe as mp
 import numpy as np
 
 # Load the trained model
-model_dict = pickle.load(open('D:\\University\\Programming\\Python\\AI Projects\\Sign Language Translator\\model.p', 'rb'))
+model_dict = pickle.load(open('.\\model.p', 'rb'))
 model = model_dict['model']
 
 # Try different camera indices

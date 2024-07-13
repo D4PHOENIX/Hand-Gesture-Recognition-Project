@@ -9,7 +9,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 
 hands = mp_hands.Hands(static_image_mode=True, min_detection_confidence=0.3)
 
-img_dir = 'D:\\University\\Programming\\Python\\AI Projects\\Sign Language Translator\\Data'
+img_dir = '.\\Data'
 output_dir = 'processed_images'  # Define a folder to save images
 
 # Create the output folder if it doesn't exist
