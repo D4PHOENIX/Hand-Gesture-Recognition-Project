@@ -5,20 +5,26 @@ img_dataset = '.\\Data'
 if not os.path.exists(img_dataset):
     os.makedirs(img_dataset)
 
-number_of_classes = 1
-dataset_size = 100
+number_of_classes = 3
+dataset_size = 1000
 
-# Try different camera indices
-cap = cv2.VideoCapture(0)
-if not cap.isOpened():
-    cap = cv2.VideoCapture(1)
-if not cap.isOpened():
-    cap = cv2.VideoCapture(2)
+# Function to open the camera
+def open_camera(indices):
+    for index in indices:
+        cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+        if cap.isOpened():
+            return cap, index
+    return None, -1
 
-# Check if the camera opened successfully
-if not cap.isOpened():
-    print("Error: Could not open video device")
+# List of indices to try
+camera_indices = [3]
+cap, used_index = open_camera(camera_indices)
+
+if not cap or used_index == -1:
+    print("Error: Could not open any video device")
     exit()
+
+print(f"Using camera index: {used_index}")
 
 for i in range(number_of_classes):
     class_dir = os.path.join(img_dataset, str(i))
@@ -34,11 +40,16 @@ for i in range(number_of_classes):
             print("Error: Failed to capture image")
             break
 
-        cv2.putText(frame, 'Ready? Press "Space" ! :)', (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 3,
-                    cv2.LINE_AA)
+        text = 'Ready? Press "Space" ! :)'
+        text_size, _ = cv2.getTextSize(text, cv2.FONT_HERSHEY_SIMPLEX, 1.3, 3)
+        text_x = (frame.shape[1] - text_size[0]) // 2
+        text_y = text_size[1] + 10  # Offset from the top
+
+        cv2.putText(frame, text, (text_x, text_y), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 255, 0), 3, cv2.LINE_AA)
         cv2.imshow('frame', frame)
+        
         if cv2.waitKey(25) == 32:
-            break  
+            break
 
     counter = 0
     while counter < dataset_size:

@@ -8,11 +8,21 @@ model_dict = pickle.load(open('.\\model.p', 'rb'))
 model = model_dict['model']
 
 # Try different camera indices
-cap = cv2.VideoCapture(0)
-if not cap.isOpened():
-    cap = cv2.VideoCapture(1)
-if not cap.isOpened():
-    cap = cv2.VideoCapture(2)
+def open_camera(indices):
+    for index in indices:
+        cap = cv2.VideoCapture(index, cv2.CAP_DSHOW)
+        if cap.isOpened():
+            return cap, index
+    return None, -1
+
+# List of indices to try
+camera_indices = [3]
+cap, used_index = open_camera(camera_indices)
+
+if not cap or used_index == -1:
+    print("Error: Could not open any video device")
+    exit()
+
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -36,7 +46,7 @@ while True:
     H, W, _ = frame.shape
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     results = hands.process(frame_rgb)
-    
+
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
             mp_drawing.draw_landmarks(
@@ -72,7 +82,7 @@ while True:
 
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 0), 4)
             cv2.putText(frame, predicted_character, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 1.3, (0, 0, 0), 3, cv2.LINE_AA)
-    
+
     cv2.imshow('frame', frame)
     if cv2.waitKey(1) & 0xFF == 32:  # Exit on spacebar press
         break
